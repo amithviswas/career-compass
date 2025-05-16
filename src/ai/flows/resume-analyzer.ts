@@ -19,12 +19,12 @@ const AnalyzeResumeAndRecommendInputSchema = z.object({
 export type AnalyzeResumeAndRecommendInput = z.infer<typeof AnalyzeResumeAndRecommendInputSchema>;
 
 const AnalyzeResumeAndRecommendOutputSchema = z.object({
-  strengths: z.string().describe('A summary of the user\'s strengths based on their resume.'),
-  weaknesses: z.string().describe('A summary of the user\'s weaknesses or skill gaps based on their resume and career goals.'),
-  missingSkills: z.string().describe('A list of specific skills the user is missing to achieve their career goals.'),
+  strengths: z.string().describe('A bullet-point summary of the user\'s strengths based on their resume.'),
+  weaknesses: z.string().describe('A bullet-point summary of the user\'s weaknesses or skill gaps based on their resume and career goals.'),
+  missingSkills: z.string().describe('A bullet-point list of specific skills the user is missing to achieve their career goals.'),
   learningResources: z
     .string()
-    .describe('Recommendations for courses, certifications, or other resources to help the user acquire the missing skills.'),
+    .describe('A bullet-point list of recommendations for courses, certifications, or other resources to help the user acquire the missing skills.'),
   benchmarkFeedback: z.object({
     feedbackText: z
       .string()
@@ -54,12 +54,16 @@ Resume:
 Career Goals:
 {{careerGoals}}
 
-Identify the user's strengths, weaknesses, and missing skills relative to their career goals. Recommend specific learning resources (courses, certifications, etc.) to acquire the missing skills. 
-Also provide benchmark feedback to optimize their profiles for specific roles. This benchmark feedback should include:
-1. Qualitative feedback with resume suggestions.
-2. A numerical score from 0 to 100 representing the resume's suitability for the target roles.
+Please format your response as follows:
+- Strengths: Provide a bullet-point summary of the user's strengths.
+- Weaknesses: Provide a bullet-point summary of the user's weaknesses or skill gaps.
+- Missing Skills: Provide a bullet-point list of specific skills the user is missing.
+- Learning Resources: Provide a bullet-point list of recommendations for courses, certifications, or other resources.
+- Benchmark Feedback: 
+  - Provide qualitative feedback with resume suggestions.
+  - Provide a numerical score from 0 to 100 representing the resume's suitability for the target roles.
 
-Your response must be structured according to the provided output schema. Ensure the score is part of the 'benchmarkFeedback' object.`,
+Your response must be structured according to the provided output schema. Ensure the score is part of the 'benchmarkFeedback' object and that strengths, weaknesses, missing skills, and learning resources are presented as bullet points.`,
 });
 
 const analyzeResumeAndRecommendFlow = ai.defineFlow(
@@ -73,4 +77,3 @@ const analyzeResumeAndRecommendFlow = ai.defineFlow(
     return output!;
   }
 );
-
