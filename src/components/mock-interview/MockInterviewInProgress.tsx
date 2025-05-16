@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Loader2, Send, CheckCircle, AlertCircle, Info } from "lucide-react";
+import { Loader2, Send, CheckCircle, AlertCircle, Info, Star } from "lucide-react";
 import type { InterviewAnswerEvalOutput } from "@/ai/flows/interview-answer-eval-flow";
 import { Progress } from "@/components/ui/progress";
 
@@ -55,7 +55,7 @@ export function MockInterviewInProgress({
     e.preventDefault();
     if (!currentAnswer.trim() || isEvaluating) return;
     await onAnswerSubmit(currentAnswer);
-    setCurrentAnswer(""); // Clear textarea for next question if needed, or keep for review
+    setCurrentAnswer(""); 
   };
 
   const progressPercentage = ((currentQuestionIndex) / questions.length) * 100;
@@ -110,11 +110,11 @@ export function MockInterviewInProgress({
               <AccordionItem value="feedback-score" className="border-b-0 rounded-lg shadow-sm bg-card">
                  <AccordionTrigger className="text-md hover:no-underline px-4 py-3 font-semibold text-foreground data-[state=open]:bg-muted/50 rounded-t-lg data-[state=open]:border-b">
                     <div className="flex items-center">
-                        <CheckCircle className="mr-2 h-5 w-5 text-green-500" /> Score: {lastEvaluationResult.score}/100
+                        <Star className="mr-2 h-5 w-5 text-yellow-500 fill-yellow-500" /> Score: {lastEvaluationResult.score}/10
                     </div>
                 </AccordionTrigger>
                 <AccordionContent className="text-sm p-4 bg-background rounded-b-lg border-t border-border">
-                     <p className="text-sm text-muted-foreground">This score reflects the AI's evaluation of your answer to the previous question.</p>
+                     <p className="text-sm text-muted-foreground">This score (1-10) reflects the AI's evaluation of your answer to the previous question.</p>
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="feedback-details" className="border-b-0 rounded-lg shadow-sm bg-card">

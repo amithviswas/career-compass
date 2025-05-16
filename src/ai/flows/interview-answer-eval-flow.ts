@@ -22,7 +22,7 @@ export type InterviewAnswerEvalInput = z.infer<typeof InterviewAnswerEvalInputSc
 const InterviewAnswerEvalOutputSchema = z.object({
   feedback: z.string().describe("Constructive feedback on the user's answer. Should be specific and presented as bullet points focusing on clarity, structure, relevance, and examples used."),
   tipsForImprovement: z.string().describe("Actionable tips for improving the answer in the future. Should be presented as bullet points."),
-  score: z.number().min(0).max(100).describe("A numerical score from 0 to 100 representing the quality of this specific answer."),
+  score: z.number().min(1).max(10).describe("A numerical score from 1 to 10 representing the quality of this specific answer (1 being poor, 10 being excellent)."),
 });
 export type InterviewAnswerEvalOutput = z.infer<typeof InterviewAnswerEvalOutputSchema>;
 
@@ -44,7 +44,7 @@ The user provided this answer:
 Your task is to evaluate this answer. Provide:
 1.  **Feedback**: Constructive feedback on their answer as a bullet-point list. Focus on aspects like clarity, structure (e.g., STAR method if applicable), relevance to the question, and the quality of examples used.
 2.  **Tips for Improvement**: Actionable tips for how the user could improve this specific answer in the future, as a bullet-point list.
-3.  **Score**: A numerical score from 0 to 100 reflecting the quality of this specific answer.
+3.  **Score**: A numerical score from 1 to 10 reflecting the quality of this specific answer (1 being poor, 10 being excellent).
 
 Ensure your response adheres strictly to the output schema.
 `,
@@ -64,3 +64,4 @@ const interviewAnswerEvalFlow = ai.defineFlow(
     return output;
   }
 );
+

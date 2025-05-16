@@ -3,10 +3,11 @@
 
 import { useState } from "react";
 import { MockInterviewSetup } from "@/components/mock-interview/MockInterviewSetup";
+import type { SetupFormValues } from "@/components/mock-interview/MockInterviewSetup";
 import { MockInterviewInProgress } from "@/components/mock-interview/MockInterviewInProgress";
 import { MockInterviewSummary } from "@/components/mock-interview/MockInterviewSummary";
 import { generateInterviewQuestions } from "@/ai/flows/interview-questions-flow";
-import type { InterviewQuestionsInput, InterviewQuestionsOutput } from "@/ai/flows/interview-questions-flow";
+import type { InterviewQuestionsInput } from "@/ai/flows/interview-questions-flow";
 import { evaluateInterviewAnswer } from "@/ai/flows/interview-answer-eval-flow";
 import type { InterviewAnswerEvalInput, InterviewAnswerEvalOutput } from "@/ai/flows/interview-answer-eval-flow";
 
@@ -23,26 +24,33 @@ interface AnswerRecord extends InterviewAnswerEvalOutput {
 
 export default function MockInterviewPage() {
   const [phase, setPhase] = useState<InterviewPhase>("setup");
-  const [targetJobRole, setTargetJobRole] = useState("");
+  const [targetJobRoleContext, setTargetJobRoleContext] = useState(""); // Stores the string for AI context
   const [questions, setQuestions] = useState<string[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [recordedAnswers, setRecordedAnswers] = useState<AnswerRecord[]>([]);
   const [lastEvaluationResult, setLastEvaluationResult] = useState<AnswerRecord | null>(null);
   const { toast } = useToast();
 
-  const handleSetupSubmit = async (values: InterviewQuestionsInput) => {
+  const handleSetupSubmit = async (values: SetupFormValues) => {
     setPhase("generatingQuestions");
-    setTargetJobRole(values.targetJobRole);
+    
+    let jobRole = values.selectedJobRole === "Other" ? values.customJobRole : values.selectedJobRole;
+    let company = values.selectedCompany === "Other" ? values.customCompany : values.selectedCompany;
+    const combinedTarget = `${jobRole}${company && company !== "Startup (General)" && company !== "Mid-size Tech Company" ? ` at ${company}` : ''}`;
+    
+    setTargetJobRoleContext(combinedTarget);
     setRecordedAnswers([]);
     setLastEvaluationResult(null);
     setCurrentQuestionIndex(0);
+
     try {
-      toast({ title: "Generating Interview Questions...", description: "Please wait while we prepare your mock interview." });
-      const result = await generateInterviewQuestions(values);
+      toast({ title: "Generating Interview Questions...", description: `Preparing for ${combinedTarget}. Please wait.` });
+      const questionInput: InterviewQuestionsInput = { targetJobRole: combinedTarget };
+      const result = await generateInterviewQuestions(questionInput);
       if (result.questions && result.questions.length > 0) {
         setQuestions(result.questions);
         setPhase("inProgress");
-        toast({ title: "Interview Ready!", description: `Generated ${result.questions.length} questions.` });
+        toast({ title: "Interview Ready!", description: `Generated ${result.questions.length} questions for ${combinedTarget}.` });
       } else {
         throw new Error("No questions were generated.");
       }
@@ -59,7 +67,7 @@ export default function MockInterviewPage() {
     try {
       toast({ title: "Evaluating Your Answer...", description: "The AI is reviewing your response." });
       const evalInput: InterviewAnswerEvalInput = {
-        targetJobRole,
+        targetJobRole: targetJobRoleContext, // Use the stored context string
         question: currentQuestion,
         userAnswer,
       };
@@ -85,18 +93,17 @@ export default function MockInterviewPage() {
     } catch (error: any) {
       console.error("Failed to evaluate answer:", error);
       toast({ title: "Evaluation Failed", description: error.message || "Could not evaluate your answer. You can try answering again or move to the next question if available.", variant: "destructive" });
-      // Potentially allow user to retry or skip. For now, moves to next state.
       if (currentQuestionIndex < questions.length - 1) {
-         setPhase("inProgress"); // Let user try again on current question or see next one.
+         setPhase("inProgress"); 
       } else {
-         setPhase("finished"); // If last question, finish.
+         setPhase("finished"); 
       }
     }
   };
 
   const handleRestartInterview = () => {
     setPhase("setup");
-    setTargetJobRole("");
+    setTargetJobRoleContext("");
     setQuestions([]);
     setCurrentQuestionIndex(0);
     setRecordedAnswers([]);
@@ -111,11 +118,11 @@ export default function MockInterviewPage() {
         return (
           <div className="flex flex-col items-center justify-center space-y-3 p-8">
             <Loader2 className="h-12 w-12 animate-spin text-primary" />
-            <p className="text-lg text-muted-foreground">Preparing your interview questions for {targetJobRole}...</p>
+            <p className="text-lg text-muted-foreground">Preparing your interview questions for {targetJobRoleContext}...</p>
           </div>
         );
       case "inProgress":
-      case "evaluatingAnswer": // Show InProgress UI even while evaluating to keep question visible
+      case "evaluatingAnswer": 
         return (
           <MockInterviewInProgress
             questions={questions}
@@ -126,7 +133,7 @@ export default function MockInterviewPage() {
           />
         );
       case "finished":
-        return <MockInterviewSummary answers={recordedAnswers} targetJobRole={targetJobRole} onRestart={handleRestartInterview} />;
+        return <MockInterviewSummary answers={recordedAnswers} targetJobRole={targetJobRoleContext} onRestart={handleRestartInterview} />;
       default:
         return <p>Something went wrong. Please refresh.</p>;
     }
