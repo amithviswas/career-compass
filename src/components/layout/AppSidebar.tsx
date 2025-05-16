@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, MessageSquare, Briefcase, ClipboardCheck, FileText, Linkedin, Mic } from "lucide-react";
+import { LayoutDashboard, MessageSquare, Briefcase, ClipboardCheck, FileText, Linkedin, Mic, HeartHandshake } from "lucide-react";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -13,6 +13,7 @@ const navItems = [
   { href: "/cover-letter", label: "Cover Letter Generator", icon: FileText },
   { href: "/linkedin-optimizer", label: "LinkedIn Optimizer", icon: Linkedin },
   { href: "/mock-interview", label: "Mock Interview", icon: Mic },
+  { href: "/soft-skills", label: "Soft Skills Analysis", icon: HeartHandshake },
   { href: "/chatbot", label: "AI Chatbot", icon: MessageSquare },
 ];
 
