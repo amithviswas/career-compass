@@ -21,26 +21,26 @@ export default function ResumeRewriterPage() {
 
     try {
       toast({
-        title: "Rewriting Your Resume...",
+        title: "Building Your ATS Resume...",
         description: "The AI is working its magic. This may take a moment.",
       });
       const result = await rewriteResume(values);
       setRewrittenResume(result);
       toast({
-        title: "Resume Rewritten!",
+        title: "ATS Resume Built!",
         description: "Your AI-enhanced resume is ready below for editing.",
       });
     } catch (error: any) {
       console.error("Resume rewriting failed:", error);
       setRewrittenResume(null);
-      let errorMessage = "Could not rewrite your resume. Please try again.";
+      let errorMessage = "Could not build your ATS resume. Please try again.";
       if (error.message && error.message.includes("AI failed to rewrite")) {
         errorMessage = "The AI failed to process your resume. This might be due to the input or a temporary issue. Please try again or rephrase your input.";
       } else if (error.message) {
         errorMessage = error.message;
       }
       toast({
-        title: "Rewriting Failed",
+        title: "Building Failed",
         description: errorMessage,
         variant: "destructive",
       });
@@ -77,7 +77,7 @@ export default function ResumeRewriterPage() {
 
   return (
     <div className="container mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold text-primary mb-2">AI Resume Rewriter &amp; Formatter</h1>
+      <h1 className="text-3xl font-bold text-primary mb-2">AI-Powered ATS Resume Maker</h1>
       <p className="text-muted-foreground mb-8 text-lg">
         Transform your raw resume text into a polished, ATS-friendly document. Edit and then prepare for PDF.
       </p>

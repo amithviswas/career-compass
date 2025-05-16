@@ -93,7 +93,7 @@ export function EditableResumeDisplay({ initialData, onUpdate }: EditableResumeD
     <Card className="w-full shadow-xl">
       <CardHeader>
         <CardTitle className="text-2xl text-primary flex items-center gap-2">
-          <Info className="h-6 w-6" /> Your Rewritten Resume
+          <Info className="h-6 w-6" /> Your AI-Built ATS Resume
         </CardTitle>
         <CardDescription>
           Review and edit the AI-generated content below. Your changes will be used when preparing for PDF.

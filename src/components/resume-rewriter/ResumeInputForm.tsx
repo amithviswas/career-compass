@@ -44,7 +44,7 @@ export function ResumeInputForm({ onSubmit, isLoading, initialData }: ResumeInpu
             <CardTitle className="text-2xl">Input Your Resume Text</CardTitle>
         </div>
         <CardDescription>
-          Paste your current resume text below. The AI will rewrite and reformat it.
+          Paste your current resume text below. The AI will build an ATS-friendly version.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -74,12 +74,12 @@ export function ResumeInputForm({ onSubmit, isLoading, initialData }: ResumeInpu
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Rewriting...
+                  Building Resume...
                 </>
               ) : (
                 <>
                   <Wand2 className="mr-2 h-4 w-4" />
-                  Rewrite My Resume
+                  Build ATS Resume
                 </>
               )}
             </Button>

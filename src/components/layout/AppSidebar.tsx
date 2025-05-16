@@ -10,7 +10,7 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   // { href: "/job-match", label: "Job Match Analyzer", icon: ClipboardCheck }, // Removed
   { href: "/job-suggester", label: "Job Role Suggester", icon: Lightbulb },
-  { href: "/resume-rewriter", label: "Resume Rewriter", icon: FileEdit },
+  { href: "/resume-rewriter", label: "ATS Resume Maker", icon: FileEdit },
   { href: "/cover-letter", label: "Cover Letter Generator", icon: FileText },
   { href: "/linkedin-optimizer", label: "LinkedIn Optimizer", icon: Linkedin },
   { href: "/mock-interview", label: "Mock Interview", icon: Mic },
