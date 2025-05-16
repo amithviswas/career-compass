@@ -47,22 +47,8 @@ Resume:
 Career Goals:
 {{careerGoals}}
 
-Identify the user's strengths, weaknesses, and missing skills relative to their career goals.  Recommend specific learning resources (courses, certifications, etc.) to acquire the missing skills. Also provide feedback to optimize their profiles for specific roles, including resume suggestions.
-
-Strengths:
-{{$jsonValue strengths}}
-
-Weaknesses:
-{{$jsonValue weaknesses}}
-
-Missing Skills:
-{{$jsonValue missingSkills}}
-
-Learning Resources:
-{{$jsonValue learningResources}}
-
-Benchmark Feedback:
-{{$jsonValue benchmarkFeedback}}`,
+Identify the user's strengths, weaknesses, and missing skills relative to their career goals. Recommend specific learning resources (courses, certifications, etc.) to acquire the missing skills. Also provide feedback to optimize their profiles for specific roles, including resume suggestions.
+Your response must be structured according to the provided output schema.`,
 });
 
 const analyzeResumeAndRecommendFlow = ai.defineFlow(
@@ -76,3 +62,4 @@ const analyzeResumeAndRecommendFlow = ai.defineFlow(
     return output!;
   }
 );
+
