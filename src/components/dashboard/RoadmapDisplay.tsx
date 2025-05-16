@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,26 +10,34 @@ interface RoadmapDisplayProps {
   analysis: AnalyzeResumeAndRecommendOutput | null;
 }
 
+// Helper function to render text with potential bullet points
+const renderBulletedText = (text: string | undefined | null) => {
+  if (!text) return <p className="text-sm text-muted-foreground">No details provided.</p>;
+
+  // Split by newlines, or newlines followed by common bullet point markers (* or -)
+  const lines = text.split(/\n\s*(?:[-*]\s*)?|\r\n\s*(?:[-*]\s*)?/)
+    .map(line => line.trim()) // Trim whitespace from each line
+    .filter(line => line.length > 0); // Remove empty lines
+
+  if (lines.length > 0) {
+    return (
+      <ul className="list-disc pl-5 space-y-1 text-sm">
+        {lines.map((line, index) => (
+          // Remove leading bullet character if AI added one, to prevent double bullets
+          <li key={index}>{line.replace(/^[-*]\s*/, "")}</li>
+        ))}
+      </ul>
+    );
+  }
+  // If no list-like structure detected, render as pre-line paragraph
+  return <p className="text-sm whitespace-pre-line">{text}</p>;
+};
+
+
 export function RoadmapDisplay({ analysis }: RoadmapDisplayProps) {
   if (!analysis) {
     return null;
   }
-
-  // Helper function to render text with potential bullet points
-  const renderBulletedText = (text: string) => {
-    const lines = text.split("\\n"); // Split by newline character if AI returns it
-    if (lines.length > 1 || text.startsWith("- ") || text.startsWith("* ")) {
-      return (
-        <ul className="list-disc pl-5 space-y-1">
-          {lines.map((line, index) => (
-            <li key={index}>{line.replace(/^[-*]\s*/, "")}</li> // Remove leading bullet characters if present
-          ))}
-        </ul>
-      );
-    }
-    return <p className="whitespace-pre-line">{text}</p>;
-  };
-
 
   return (
     <Card className="w-full shadow-lg mt-8">
@@ -46,7 +55,7 @@ export function RoadmapDisplay({ analysis }: RoadmapDisplayProps) {
                 <CheckCircle className="mr-2 h-5 w-5 text-green-500" /> Strengths
               </div>
             </AccordionTrigger>
-            <AccordionContent className="text-sm p-4 bg-secondary/30 rounded-md whitespace-pre-line">
+            <AccordionContent className="text-sm p-4 bg-secondary/30 rounded-md">
               {renderBulletedText(analysis.strengths)}
             </AccordionContent>
           </AccordionItem>
@@ -57,7 +66,7 @@ export function RoadmapDisplay({ analysis }: RoadmapDisplayProps) {
                 <XCircle className="mr-2 h-5 w-5 text-red-500" /> Weaknesses / Areas for Improvement
               </div>
             </AccordionTrigger>
-            <AccordionContent className="text-sm p-4 bg-secondary/30 rounded-md whitespace-pre-line">
+            <AccordionContent className="text-sm p-4 bg-secondary/30 rounded-md">
               {renderBulletedText(analysis.weaknesses)}
             </AccordionContent>
           </AccordionItem>
@@ -68,7 +77,7 @@ export function RoadmapDisplay({ analysis }: RoadmapDisplayProps) {
                 <Target className="mr-2 h-5 w-5 text-blue-500" /> Missing Skills
               </div>
             </AccordionTrigger>
-            <AccordionContent className="text-sm p-4 bg-secondary/30 rounded-md whitespace-pre-line">
+            <AccordionContent className="text-sm p-4 bg-secondary/30 rounded-md">
               {renderBulletedText(analysis.missingSkills)}
             </AccordionContent>
           </AccordionItem>
@@ -79,7 +88,7 @@ export function RoadmapDisplay({ analysis }: RoadmapDisplayProps) {
                  <Lightbulb className="mr-2 h-5 w-5 text-yellow-500" /> Learning Resources
               </div>
             </AccordionTrigger>
-            <AccordionContent className="text-sm p-4 bg-secondary/30 rounded-md whitespace-pre-line">
+            <AccordionContent className="text-sm p-4 bg-secondary/30 rounded-md">
               {renderBulletedText(analysis.learningResources)}
             </AccordionContent>
           </AccordionItem>
@@ -96,9 +105,7 @@ export function RoadmapDisplay({ analysis }: RoadmapDisplayProps) {
                   Overall Suitability Score: <span className="text-primary text-lg">{analysis.benchmarkFeedback.score}/100</span>
                 </p>
               )}
-              <div className="whitespace-pre-line">
-                {analysis.benchmarkFeedback?.feedbackText}
-              </div>
+              {renderBulletedText(analysis.benchmarkFeedback?.feedbackText)}
             </AccordionContent>
           </AccordionItem>
         </Accordion>
