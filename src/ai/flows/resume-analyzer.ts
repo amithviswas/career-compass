@@ -24,7 +24,7 @@ const AnalyzeResumeAndRecommendOutputSchema = z.object({
   missingSkills: z.string().describe('A bullet-point list of specific skills the user is missing to achieve their career goals.'),
   learningResources: z
     .string()
-    .describe('A bullet-point list of recommendations for courses, certifications, or other resources to help the user acquire the missing skills.'),
+    .describe('A bullet-point list of specific recommendations for courses (free or paid), certifications, or other learning resources from platforms like Coursera, edX, YouTube, etc., to help the user acquire the missing skills. Each recommendation should be targeted to a specific missing skill.'),
   benchmarkFeedback: z.object({
     feedbackText: z
       .string()
@@ -58,7 +58,7 @@ Please format your response as follows:
 - Strengths: Provide a bullet-point summary of the user's strengths.
 - Weaknesses: Provide a bullet-point summary of the user's weaknesses or skill gaps.
 - Missing Skills: Provide a bullet-point list of specific skills the user is missing.
-- Learning Resources: Provide a bullet-point list of recommendations for courses, certifications, or other resources.
+- Learning Resources: Provide a bullet-point list of specific recommendations for courses (both free and paid options if relevant), certifications, or other learning resources to help the user acquire the identified 'Missing Skills'. For each missing skill, suggest targeted resources from platforms like Coursera, edX, YouTube, or other reputable sources (e.g., "For improving Python skills: 'Python for Everybody Specialization' on Coursera (paid) or 'freeCodeCamp's Python tutorial' on YouTube (free)"). Clearly link the resource to the skill it addresses.
 - Benchmark Feedback: 
   - Provide qualitative feedback with resume suggestions.
   - Provide a numerical score from 0 to 100 representing the resume's suitability for the target roles.
@@ -77,3 +77,4 @@ const analyzeResumeAndRecommendFlow = ai.defineFlow(
     return output!;
   }
 );
+
