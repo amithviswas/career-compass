@@ -5,12 +5,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, MessageSquare, Briefcase, ClipboardCheck, FileText } from "lucide-react";
+import { LayoutDashboard, MessageSquare, Briefcase, ClipboardCheck, FileText, Linkedin } from "lucide-react";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/job-match", label: "Job Match Analyzer", icon: ClipboardCheck },
   { href: "/cover-letter", label: "Cover Letter Generator", icon: FileText },
+  { href: "/linkedin-optimizer", label: "LinkedIn Optimizer", icon: Linkedin },
   { href: "/chatbot", label: "AI Chatbot", icon: MessageSquare },
   // Add more items like Profile/Settings if needed
   // { href: "/profile", label: "Profile", icon: Settings },
