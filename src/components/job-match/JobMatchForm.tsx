@@ -3,6 +3,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import * as z from "zod"; // Added for local schema definition
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -18,8 +19,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ClipboardCheck, Loader2 } from "lucide-react";
 import type { JobMatchAnalyzerInput } from "@/ai/flows/job-match-analyzer-flow";
-import { JobMatchAnalyzerInputSchema } from "@/ai/flows/job-match-analyzer-flow";
+// Removed import of JobMatchAnalyzerInputSchema from flow file
 
+// Define the schema locally for client-side validation
+const localJobMatchFormSchema = z.object({
+  resumeText: z.string().min(100, { message: "Resume text must be at least 100 characters." }).max(10000, { message: "Resume text must be less than 10000 characters." }),
+  targetJobTitleAndCompany: z.string().min(5, {message: "Target job title and company must be at least 5 characters."}).max(200, {message: "Target job title and company must be less than 200 characters."}),
+});
 
 interface JobMatchFormProps {
   onSubmit: (values: JobMatchAnalyzerInput) => Promise<void>;
@@ -28,8 +34,8 @@ interface JobMatchFormProps {
 }
 
 export function JobMatchForm({ onSubmit, isLoading, initialData }: JobMatchFormProps) {
-  const form = useForm<JobMatchAnalyzerInput>({
-    resolver: zodResolver(JobMatchAnalyzerInputSchema),
+  const form = useForm<JobMatchAnalyzerInput>({ // Form values type still uses JobMatchAnalyzerInput from flow
+    resolver: zodResolver(localJobMatchFormSchema), // Use local schema for resolver
     defaultValues: {
       resumeText: initialData?.resumeText || "",
       targetJobTitleAndCompany: initialData?.targetJobTitleAndCompany || "",
@@ -106,3 +112,4 @@ export function JobMatchForm({ onSubmit, isLoading, initialData }: JobMatchFormP
     </Card>
   );
 }
+

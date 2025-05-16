@@ -12,7 +12,8 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const JobMatchAnalyzerInputSchema = z.object({
+// Schema is now local to this file, not exported.
+const JobMatchAnalyzerInputSchema = z.object({
   resumeText: z.string().min(100, { message: "Resume text must be at least 100 characters." }).max(10000, { message: "Resume text must be less than 10000 characters." })
     .describe('The text content of the user\'s resume.'),
   targetJobTitleAndCompany: z.string().min(5, {message: "Target job title and company must be at least 5 characters."}).max(200, {message: "Target job title and company must be less than 200 characters."})
@@ -20,7 +21,8 @@ export const JobMatchAnalyzerInputSchema = z.object({
 });
 export type JobMatchAnalyzerInput = z.infer<typeof JobMatchAnalyzerInputSchema>;
 
-export const JobMatchAnalyzerOutputSchema = z.object({
+// Schema is now local to this file, not exported.
+const JobMatchAnalyzerOutputSchema = z.object({
   sampleJobDescription: z.string().describe("The sample job description generated and used for the analysis."),
   matchingKeywords: z.string().describe("A bullet-point list of keywords and phrases found in both the resume and the sample job description."),
   missingSkills: z.string().describe("A bullet-point list of key skills, qualifications, or experiences from the sample job description that are missing or underdeveloped in the resume."),
@@ -79,3 +81,4 @@ const jobMatchAnalyzerFlow = ai.defineFlow(
     return output;
   }
 );
+
