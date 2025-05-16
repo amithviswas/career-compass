@@ -5,11 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, MessageSquare, Briefcase, ClipboardCheck, FileText, Linkedin, Mic, HeartHandshake, Lightbulb } from "lucide-react";
+import { LayoutDashboard, MessageSquare, Briefcase, FileText, Linkedin, Mic, HeartHandshake, Lightbulb } from "lucide-react"; // Removed ClipboardCheck
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/job-match", label: "Job Match Analyzer", icon: ClipboardCheck },
+  // { href: "/job-match", label: "Job Match Analyzer", icon: ClipboardCheck }, // Removed
   { href: "/job-suggester", label: "Job Role Suggester", icon: Lightbulb },
   { href: "/cover-letter", label: "Cover Letter Generator", icon: FileText },
   { href: "/linkedin-optimizer", label: "LinkedIn Optimizer", icon: Linkedin },
