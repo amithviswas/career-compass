@@ -29,7 +29,7 @@ interface SuggestionCategory {
   prompts: Suggestion[];
 }
 
-const suggestionData: SuggestionCategory[] = [
+const initialSuggestionData: SuggestionCategory[] = [
   {
     name: "General",
     icon: MessageCircle,
@@ -77,7 +77,11 @@ export function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [activeSuggestionCategory, setActiveSuggestionCategory] = useState<string>(suggestionData[0].name);
+  const [suggestionCategories, setSuggestionCategories] = useState<SuggestionCategory[]>(
+    JSON.parse(JSON.stringify(initialSuggestionData)) // Deep copy to allow modification
+  );
+  const [activeSuggestionCategoryName, setActiveSuggestionCategoryName] = useState<string>(initialSuggestionData[0].name);
+  
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -136,9 +140,31 @@ export function ChatInterface() {
   const handleSuggestionClick = async (promptText: string) => {
     if (isLoading) return;
     await submitMessageToBot(promptText);
+
+    setSuggestionCategories(prevCategories => {
+      const updatedCategories = prevCategories.map(category => {
+        if (category.name === activeSuggestionCategoryName) {
+          return {
+            ...category,
+            prompts: category.prompts.filter(prompt => prompt.text !== promptText),
+          };
+        }
+        return category;
+      });
+      // If the active category becomes empty, try to switch to another category with prompts
+      const activeCatHasPrompts = updatedCategories.find(c => c.name === activeSuggestionCategoryName)?.prompts.length > 0;
+      if (!activeCatHasPrompts) {
+          const nextActiveCategory = updatedCategories.find(c => c.prompts.length > 0);
+          if (nextActiveCategory) {
+              setActiveSuggestionCategoryName(nextActiveCategory.name);
+          }
+      }
+      return updatedCategories.filter(category => category.prompts.length > 0);
+    });
   };
 
-  const currentPrompts = suggestionData.find(cat => cat.name === activeSuggestionCategory)?.prompts || [];
+  const currentPrompts = suggestionCategories.find(cat => cat.name === activeSuggestionCategoryName)?.prompts || [];
+  const showSuggestionsPanel = suggestionCategories.some(category => category.prompts.length > 0);
 
   return (
     <Card className="w-full h-[calc(100vh-10rem)] md:h-[calc(100vh-12rem)] flex flex-col shadow-xl">
@@ -196,43 +222,49 @@ export function ChatInterface() {
         </ScrollArea>
       </CardContent>
       <CardFooter className="border-t p-4 flex flex-col gap-4">
-        <div className="w-full">
-          <p className="text-xs font-semibold mb-2 text-muted-foreground">Topic Suggestions:</p>
-          <div className="flex flex-wrap gap-2 mb-3">
-            {suggestionData.map(category => {
-              const Icon = category.icon;
-              return (
-                <Button
-                  key={category.name}
-                  variant={activeSuggestionCategory === category.name ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setActiveSuggestionCategory(category.name)}
-                  className="text-xs px-3 py-1.5 h-auto"
-                  disabled={isLoading}
-                >
-                  <Icon className="mr-1.5 h-3.5 w-3.5" />
-                  {category.name}
-                </Button>
-              );
-            })}
+        {showSuggestionsPanel && (
+          <div className="w-full">
+            <p className="text-xs font-semibold mb-2 text-muted-foreground">Topic Suggestions:</p>
+            <div className="flex flex-wrap gap-2 mb-3">
+              {suggestionCategories.map(category => {
+                // Only show category button if it still has prompts or is the active one (even if temporarily empty)
+                if (category.prompts.length > 0 || category.name === activeSuggestionCategoryName) {
+                    const Icon = category.icon;
+                    return (
+                    <Button
+                        key={category.name}
+                        variant={activeSuggestionCategoryName === category.name ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setActiveSuggestionCategoryName(category.name)}
+                        className="text-xs px-3 py-1.5 h-auto"
+                        disabled={isLoading || category.prompts.length === 0 && category.name !== activeSuggestionCategoryName}
+                    >
+                        <Icon className="mr-1.5 h-3.5 w-3.5" />
+                        {category.name}
+                    </Button>
+                    );
+                }
+                return null;
+              })}
+            </div>
+            <ScrollArea className="h-auto max-h-[70px] w-full">
+                <div className="flex flex-wrap gap-1.5 pb-1">
+                  {currentPrompts.map(prompt => (
+                    <Button
+                      key={prompt.text}
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleSuggestionClick(prompt.text)}
+                      className="text-xs h-auto px-2.5 py-1.5 bg-muted hover:bg-muted/80 text-muted-foreground justify-start text-left leading-snug"
+                      disabled={isLoading}
+                    >
+                      {prompt.text}
+                    </Button>
+                  ))}
+                </div>
+            </ScrollArea>
           </div>
-          <ScrollArea className="h-auto max-h-[70px] w-full"> {/* Adjusted max-h */}
-              <div className="flex flex-wrap gap-1.5 pb-1">
-                {currentPrompts.map(prompt => (
-                  <Button
-                    key={prompt.text}
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleSuggestionClick(prompt.text)}
-                    className="text-xs h-auto px-2.5 py-1.5 bg-muted hover:bg-muted/80 text-muted-foreground justify-start text-left leading-snug"
-                    disabled={isLoading}
-                  >
-                    {prompt.text}
-                  </Button>
-                ))}
-              </div>
-          </ScrollArea>
-        </div>
+        )}
 
         <form onSubmit={handleFormSubmit} className="flex w-full items-center gap-3">
           <Input
