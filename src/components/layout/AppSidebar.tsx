@@ -17,9 +17,9 @@ export function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden md:flex md:flex-col md:w-64 bg-sidebar text-sidebar-foreground border-r border-sidebar-border fixed h-full">
+    <aside className="hidden md:flex md:flex-col md:w-[var(--sidebar-width)] bg-sidebar text-sidebar-foreground border-r border-sidebar-border fixed h-full">
       <div className="flex items-center justify-center h-16 border-b border-sidebar-border ">
-        <Link href="/dashboard" className="flex items-center gap-2 text-lg font-semibold text-sidebar-primary-foreground">
+        <Link href="/dashboard" className="flex items-center gap-2 text-lg font-semibold text-sidebar-foreground">
           <Briefcase className="h-7 w-7 text-sidebar-primary" />
           <span>CareerCompass</span>
         </Link>

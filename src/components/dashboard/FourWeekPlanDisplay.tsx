@@ -13,17 +13,15 @@ interface FourWeekPlanDisplayProps {
 const renderBulletedText = (text: string | undefined | null) => {
   if (!text) return <p className="text-sm text-muted-foreground">No details provided.</p>;
   
-  // Split by newlines, or newlines followed by common bullet point markers (* or -)
-  // Also handles cases where AI might just use \n for new lines without explicit bullets
   const lines = text.split(/\n\s*(?:[-*]\s*)?|\r\n\s*(?:[-*]\s*)?/)
-    .map(line => line.trim()) // Trim whitespace from each line
-    .filter(line => line.length > 0); // Remove empty lines
+    .map(line => line.trim()) 
+    .filter(line => line.length > 0); 
 
   if (lines.length > 0) {
     return (
-      <ul className="list-disc pl-5 space-y-1 text-sm">
+      <ul className="list-disc pl-5 space-y-1.5 text-sm">
         {lines.map((line, index) => (
-          <li key={index}>{line.replace(/^[-*]\s*/, "")}</li> // Remove leading bullet character if AI added one
+          <li key={index}>{line.replace(/^[-*]\s*/, "")}</li> 
         ))}
       </ul>
     );
@@ -36,9 +34,9 @@ export function FourWeekPlanDisplay({ plan }: FourWeekPlanDisplayProps) {
     return (
         <Card className="w-full shadow-lg mt-8">
             <CardHeader>
-                 <div className="flex items-center gap-2 text-primary">
-                    <CalendarDays className="h-6 w-6" />
-                    <CardTitle className="text-2xl">4-Week Plan</CardTitle>
+                 <div className="flex items-center gap-3 text-primary">
+                    <CalendarDays className="h-7 w-7" />
+                    <CardTitle className="text-2xl">4-Week Action Plan</CardTitle>
                 </div>
             </CardHeader>
             <CardContent>
@@ -51,8 +49,8 @@ export function FourWeekPlanDisplay({ plan }: FourWeekPlanDisplayProps) {
   return (
     <Card className="w-full shadow-lg mt-8">
       <CardHeader>
-        <div className="flex items-center gap-2 text-primary">
-          <CalendarDays className="h-6 w-6" />
+        <div className="flex items-center gap-3 text-primary">
+          <CalendarDays className="h-7 w-7" />
           <CardTitle className="text-2xl">{plan.planTitle || "Your 4-Week Career Kickstarter Plan"}</CardTitle>
         </div>
         <CardDescription>
@@ -60,15 +58,15 @@ export function FourWeekPlanDisplay({ plan }: FourWeekPlanDisplayProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Accordion type="multiple" defaultValue={['week-1']} className="w-full space-y-4">
+        <Accordion type="multiple" defaultValue={['week-1']} className="w-full space-y-2">
           {plan.weeks.map((week, index) => (
-            <AccordionItem value={`week-${week.weekNumber || index + 1}`} key={index} className="border rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <AccordionTrigger className="text-lg hover:no-underline px-6 py-4 bg-muted/50 hover:bg-muted/75 rounded-t-lg data-[state=open]:rounded-b-none data-[state=open]:border-b">
-                <div className="flex items-center font-semibold">
+            <AccordionItem value={`week-${week.weekNumber || index + 1}`} key={index} className="border-b-0 rounded-lg shadow-sm hover:shadow-md transition-shadow bg-card">
+              <AccordionTrigger className="text-lg hover:no-underline px-6 py-4 font-semibold text-foreground data-[state=open]:bg-muted/50 rounded-t-lg data-[state=open]:border-b">
+                <div className="flex items-center">
                   Week {week.weekNumber || index + 1}
                 </div>
               </AccordionTrigger>
-              <AccordionContent className="p-6 space-y-6 bg-background rounded-b-lg border border-t-0">
+              <AccordionContent className="p-6 space-y-6 bg-background rounded-b-lg border-t border-border">
                 <div>
                   <div className="flex items-center gap-2 mb-3 text-md font-semibold text-primary">
                     <BookOpen className="h-5 w-5" />
