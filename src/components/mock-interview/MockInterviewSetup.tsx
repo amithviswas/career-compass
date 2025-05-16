@@ -24,8 +24,9 @@ const JOB_ROLES = [
   "Marketing Manager", "Project Manager", "Sales Representative", 
   "Human Resources Specialist", "Business Analyst", "Customer Support Representative", "Other"
 ];
+// Updated company list
 const COMPANIES = [
-  "Google", "Amazon", "Microsoft", "Apple", "Facebook (Meta)", "Netflix", 
+  "Google", "Amazon", "Microsoft", "Meta", "Netflix", "Apple", 
   "Salesforce", "Adobe", "IBM", "Oracle", "Startup (General)", "Mid-size Tech Company", "Other"
 ];
 
@@ -68,7 +69,7 @@ export function MockInterviewSetup({ onSubmit, isLoading }: MockInterviewSetupPr
       <CardHeader>
         <CardTitle className="text-2xl text-primary">Mock Interview Setup</CardTitle>
         <CardDescription>
-          Select or enter the job role and company you want to practice for. We'll generate relevant questions.
+          Select or enter the job role and company you want to practice for. The interview will have two parts: Multiple Choice Questions (MCQs) and Descriptive Questions.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -171,3 +172,4 @@ export function MockInterviewSetup({ onSubmit, isLoading }: MockInterviewSetupPr
     </Card>
   );
 }
+

@@ -12,3 +12,5 @@ import '@/ai/flows/linkedin-optimizer-flow.ts';
 import '@/ai/flows/interview-questions-flow.ts';
 import '@/ai/flows/interview-answer-eval-flow.ts';
 import '@/ai/flows/soft-skills-analyzer-flow.ts';
+import '@/ai/flows/mcq-generator-flow.ts';
+
