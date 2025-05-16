@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-background to-secondary/30 p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-primary/5 to-background p-4">
       <Card className="w-full max-w-2xl shadow-2xl">
         <CardHeader className="text-center">
           <div className="inline-flex items-center justify-center p-3 mb-4 rounded-full bg-primary text-primary-foreground mx-auto">

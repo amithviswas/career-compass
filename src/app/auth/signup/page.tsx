@@ -31,7 +31,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-background to-secondary/30 p-4">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-primary/5 to-background p-4">
       <AuthForm onSubmit={handleSubmit} loading={loading} />
     </div>
   );
