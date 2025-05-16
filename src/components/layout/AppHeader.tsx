@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from "@/components/ui/sheet";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -22,7 +23,9 @@ import {
   Mic, 
   HeartHandshake, 
   Lightbulb,
-  FileEdit
+  FileEdit,
+  Github,
+  Instagram
 } from "lucide-react";
 
 const navItems = [
@@ -34,6 +37,12 @@ const navItems = [
   { href: "/mock-interview", label: "Mock Interview", icon: Mic },
   { href: "/soft-skills", label: "Soft Skills Analysis", icon: HeartHandshake },
   { href: "/chatbot", label: "AI Chatbot", icon: MessageSquare },
+];
+
+const socialLinks = [
+  { name: "GitHub", href: "https://github.com/amithviswas", icon: Github },
+  { name: "LinkedIn", href: "https://www.linkedin.com/in/amith-viswas-reddy/", icon: Linkedin },
+  { name: "Instagram", href: "https://www.instagram.com/amithviswas_reddy/", icon: Instagram },
 ];
 
 export function AppHeader() {
@@ -90,7 +99,7 @@ export function AppHeader() {
                   asChild
                   variant={pathname === item.href ? "default" : "ghost"}
                   className={cn(
-                    "w-full justify-start text-base py-3", // Increased padding for better touch targets
+                    "w-full justify-start text-base py-3", 
                     pathname === item.href
                       ? "bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary/90"
                       : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
@@ -114,14 +123,31 @@ export function AppHeader() {
         </Link>
       </div>
       
-      <div className="flex items-center gap-2 sm:gap-4">
+      <div className="flex items-center gap-1 sm:gap-2">
+        <TooltipProvider>
+          {socialLinks.map((social) => (
+            <Tooltip key={social.name}>
+              <TooltipTrigger asChild>
+                <Button asChild variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                  <Link href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.name}>
+                    <social.icon className="h-5 w-5" />
+                  </Link>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{social.name}</p>
+              </TooltipContent>
+            </Tooltip>
+          ))}
+        </TooltipProvider>
+
         {user && (
-          <div className="hidden sm:flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="hidden sm:flex items-center gap-2 text-sm text-muted-foreground ml-2">
             <UserCircle className="h-5 w-5" />
             <span>{user.displayName || user.email}</span>
           </div>
         )}
-        <Button variant="ghost" size="icon" onClick={handleSignOut} aria-label="Log out">
+        <Button variant="ghost" size="icon" onClick={handleSignOut} aria-label="Log out" className="ml-1">
           <LogOut className="h-5 w-5 text-destructive" />
         </Button>
       </div>
