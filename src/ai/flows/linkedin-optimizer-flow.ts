@@ -12,7 +12,7 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const LinkedInOptimizerInputSchema = z.object({
+const LinkedInOptimizerInputSchema = z.object({
   currentHeadline: z.string().max(220).optional().describe("The user's current LinkedIn headline."),
   currentAboutSection: z.string().max(2600).optional().describe("The user's current LinkedIn 'About' section."),
   currentExperience: z.string().max(5000).optional().describe("The user's current LinkedIn experience section text. Can be a summary or key points."),
@@ -21,7 +21,7 @@ export const LinkedInOptimizerInputSchema = z.object({
 });
 export type LinkedInOptimizerInput = z.infer<typeof LinkedInOptimizerInputSchema>;
 
-export const LinkedInOptimizerOutputSchema = z.object({
+const LinkedInOptimizerOutputSchema = z.object({
   overallAnalysis: z.string().describe("A brief, 2-3 sentence overall analysis of the current profile's alignment with the career goal."),
   weaknessAnalysis: z.string().describe("A bullet-point analysis of specific weaknesses or areas for improvement in the provided LinkedIn profile sections relative to the career goal."),
   missingKeywords: z.string().describe("A bullet-point list of important keywords relevant to the career goal that seem to be missing or underutilized in the profile."),
@@ -77,3 +77,4 @@ const linkedinOptimizerFlow = ai.defineFlow(
     return output;
   }
 );
+

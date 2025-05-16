@@ -3,6 +3,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import * as z from "zod"; // Import Zod
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,7 +18,18 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Linkedin, Loader2, Sparkles } from "lucide-react";
-import { LinkedInOptimizerInputSchema, type LinkedInOptimizerInput } from "@/ai/flows/linkedin-optimizer-flow";
+// Removed import of LinkedInOptimizerInputSchema from flow
+import type { LinkedInOptimizerInput } from "@/ai/flows/linkedin-optimizer-flow";
+
+// Define the schema locally for client-side validation
+const linkedInOptimizerFormSchema = z.object({
+  currentHeadline: z.string().max(220, {message: "Headline must be less than 220 characters."}).optional().or(z.literal("")),
+  currentAboutSection: z.string().max(2600, {message: "About section must be less than 2600 characters."}).optional().or(z.literal("")),
+  currentExperience: z.string().max(5000, {message: "Experience summary must be less than 5000 characters."}).optional().or(z.literal("")),
+  currentSkills: z.string().max(1000, {message: "Skills list must be less than 1000 characters."}).optional().or(z.literal("")),
+  careerGoal: z.string().min(5, { message: "Career goal must be at least 5 characters." }).max(200, { message: "Career goal must be less than 200 characters." }),
+});
+
 
 interface LinkedInProfileFormProps {
   onSubmit: (values: LinkedInOptimizerInput) => Promise<void>;
@@ -27,7 +39,7 @@ interface LinkedInProfileFormProps {
 
 export function LinkedInProfileForm({ onSubmit, isLoading, initialData }: LinkedInProfileFormProps) {
   const form = useForm<LinkedInOptimizerInput>({
-    resolver: zodResolver(LinkedInOptimizerInputSchema),
+    resolver: zodResolver(linkedInOptimizerFormSchema), // Use the local schema
     defaultValues: {
       currentHeadline: initialData?.currentHeadline || "",
       currentAboutSection: initialData?.currentAboutSection || "",
@@ -148,3 +160,4 @@ export function LinkedInProfileForm({ onSubmit, isLoading, initialData }: Linked
     </Card>
   );
 }
+
