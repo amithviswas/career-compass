@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -21,12 +20,14 @@ import {
   Linkedin, 
   Mic, 
   HeartHandshake, 
-  Lightbulb 
+  Lightbulb,
+  FileEdit
 } from "lucide-react";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/job-suggester", label: "Job Role Suggester", icon: Lightbulb },
+  { href: "/resume-rewriter", label: "Resume Rewriter", icon: FileEdit },
   { href: "/cover-letter", label: "Cover Letter Generator", icon: FileText },
   { href: "/linkedin-optimizer", label: "LinkedIn Optimizer", icon: Linkedin },
   { href: "/mock-interview", label: "Mock Interview", icon: Mic },
