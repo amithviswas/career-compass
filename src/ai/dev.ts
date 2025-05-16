@@ -9,3 +9,5 @@ import '@/ai/flows/job-match-analyzer-flow.ts';
 import '@/ai/flows/resume-parser-flow.ts';
 import '@/ai/flows/cover-letter-generator-flow.ts';
 import '@/ai/flows/linkedin-optimizer-flow.ts';
+import '@/ai/flows/interview-questions-flow.ts';
+import '@/ai/flows/interview-answer-eval-flow.ts';
