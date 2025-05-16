@@ -77,9 +77,9 @@ export function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [suggestionCategories, setSuggestionCategories] = useState<SuggestionCategory[]>(
-    JSON.parse(JSON.stringify(initialSuggestionData)) // Deep copy to allow modification
-  );
+  // Initialize state directly with initialSuggestionData
+  // JSON.parse(JSON.stringify(...)) breaks component references (functions)
+  const [suggestionCategories, setSuggestionCategories] = useState<SuggestionCategory[]>(initialSuggestionData);
   const [activeSuggestionCategoryName, setActiveSuggestionCategoryName] = useState<string>(initialSuggestionData[0].name);
   
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -142,26 +142,63 @@ export function ChatInterface() {
     await submitMessageToBot(promptText);
 
     setSuggestionCategories(prevCategories => {
+      let newActiveCategoryName = activeSuggestionCategoryName;
       const updatedCategories = prevCategories.map(category => {
         if (category.name === activeSuggestionCategoryName) {
+          const updatedPrompts = category.prompts.filter(prompt => prompt.text !== promptText);
+          // If the active category becomes empty, try to find a new active one
+          if (updatedPrompts.length === 0) {
+              const nextCategoryWithPrompts = prevCategories.find(cat => cat.name !== activeSuggestionCategoryName && cat.prompts.length > 0);
+              if (nextCategoryWithPrompts) {
+                  newActiveCategoryName = nextCategoryWithPrompts.name;
+              } else {
+                  // If no other categories have prompts, check if any category (even the current one if it was the last) has prompts
+                  // This logic might be simplified by filtering categories later
+              }
+          }
           return {
             ...category,
-            prompts: category.prompts.filter(prompt => prompt.text !== promptText),
+            prompts: updatedPrompts,
           };
         }
         return category;
       });
-      // If the active category becomes empty, try to switch to another category with prompts
-      const activeCatHasPrompts = updatedCategories.find(c => c.name === activeSuggestionCategoryName)?.prompts.length > 0;
-      if (!activeCatHasPrompts) {
-          const nextActiveCategory = updatedCategories.find(c => c.prompts.length > 0);
-          if (nextActiveCategory) {
-              setActiveSuggestionCategoryName(nextActiveCategory.name);
-          }
+
+      const filteredCategories = updatedCategories.filter(category => category.prompts.length > 0);
+      
+      // If the previously active category was removed and no new one was set,
+      // pick the first available category from the filtered list.
+      if (!filteredCategories.find(cat => cat.name === newActiveCategoryName) && filteredCategories.length > 0) {
+          newActiveCategoryName = filteredCategories[0].name;
       }
-      return updatedCategories.filter(category => category.prompts.length > 0);
+      
+      // Update active category name state separately if it changed
+      if (newActiveCategoryName !== activeSuggestionCategoryName) {
+        setActiveSuggestionCategoryName(newActiveCategoryName);
+      }
+      // If all categories are empty, newActiveCategoryName might not be valid for currentPrompts lookup
+      // but showSuggestionsPanel will handle hiding the panel.
+
+      return filteredCategories;
     });
   };
+  
+  // Recalculate activeSuggestionCategoryName if the current one has no prompts and others do
+  useEffect(() => {
+    const activeCat = suggestionCategories.find(c => c.name === activeSuggestionCategoryName);
+    if ((!activeCat || activeCat.prompts.length === 0) && suggestionCategories.length > 0) {
+        const firstCatWithPrompts = suggestionCategories.find(c => c.prompts.length > 0);
+        if (firstCatWithPrompts) {
+            setActiveSuggestionCategoryName(firstCatWithPrompts.name);
+        } else if (suggestionCategories.length > 0) {
+             // If all categories are empty but categories list itself is not empty (e.g. transitioning to empty)
+             // Keep current active name, panel will hide. Or pick first name.
+             // This state is mostly for when suggestions *are* available.
+             setActiveSuggestionCategoryName(suggestionCategories[0].name);
+        }
+    }
+  }, [suggestionCategories, activeSuggestionCategoryName]);
+
 
   const currentPrompts = suggestionCategories.find(cat => cat.name === activeSuggestionCategoryName)?.prompts || [];
   const showSuggestionsPanel = suggestionCategories.some(category => category.prompts.length > 0);
@@ -227,10 +264,8 @@ export function ChatInterface() {
             <p className="text-xs font-semibold mb-2 text-muted-foreground">Topic Suggestions:</p>
             <div className="flex flex-wrap gap-2 mb-3">
               {suggestionCategories.map(category => {
-                // Only show category button if it still has prompts or is the active one (even if temporarily empty)
-                if (category.prompts.length > 0 || category.name === activeSuggestionCategoryName) {
-                    const Icon = category.icon;
-                    return (
+                const Icon = category.icon; // Icon is a component type
+                return (
                     <Button
                         key={category.name}
                         variant={activeSuggestionCategoryName === category.name ? "default" : "outline"}
@@ -242,9 +277,7 @@ export function ChatInterface() {
                         <Icon className="mr-1.5 h-3.5 w-3.5" />
                         {category.name}
                     </Button>
-                    );
-                }
-                return null;
+                );
               })}
             </div>
             <ScrollArea className="h-auto max-h-[70px] w-full">
@@ -284,4 +317,3 @@ export function ChatInterface() {
     </Card>
   );
 }
-
