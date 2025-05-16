@@ -12,7 +12,7 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const MCQQuestionSchema = z.object({
+const MCQQuestionSchema = z.object({
   questionText: z.string().describe("The text of the multiple-choice question."),
   options: z.array(z.string()).length(4).describe("An array of exactly four answer options."),
   correctAnswerIndex: z.number().min(0).max(3).describe("The 0-based index of the correct answer in the 'options' array."),
