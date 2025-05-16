@@ -1,10 +1,11 @@
+
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from "@/components/ui/sheet";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -65,6 +66,7 @@ export function AppHeader() {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-72 sm:w-80 bg-sidebar text-sidebar-foreground p-0">
+            <SheetTitle className="sr-only">Mobile Navigation Menu</SheetTitle>
             <div className="flex items-center justify-between h-16 border-b border-sidebar-border px-4">
               <Link 
                 href="/dashboard" 
