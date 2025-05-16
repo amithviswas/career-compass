@@ -11,7 +11,7 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const FourWeekPlanInputSchema = z.object({
+const FourWeekPlanInputSchema = z.object({
   careerGoal: z.string().describe("The user's primary career goal."),
   currentStrengths: z.string().describe("User's current strengths, can be bullet points from previous analysis."),
   areasForImprovement: z.string().describe("User's areas for improvement or weaknesses, can be bullet points from previous analysis."),
@@ -26,7 +26,7 @@ const WeeklyPlanSchema = z.object({
   mockInterviewPrep: z.string().describe('Tasks and focus areas for mock interview preparation for the week, relevant to the career goal. Presented as bullet points.'),
 });
 
-export const FourWeekPlanOutputSchema = z.object({
+const FourWeekPlanOutputSchema = z.object({
   planTitle: z.string().describe("A catchy and motivational title for the 4-week plan, tailored to the user's career goal."),
   weeks: z.array(WeeklyPlanSchema).length(4).describe('A detailed 4-week plan, with specific tasks for each week covering study, LinkedIn, and mock interviews.'),
 });
