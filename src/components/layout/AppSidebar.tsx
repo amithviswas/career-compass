@@ -1,14 +1,27 @@
+
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, MessageSquare, Briefcase, FileText, Linkedin, Mic, HeartHandshake, Lightbulb, FileEdit } from "lucide-react"; // Removed ClipboardCheck, Added FileEdit
+import { 
+    LayoutDashboard, 
+    MessageSquare, 
+    Briefcase, 
+    FileText, 
+    Linkedin, 
+    Mic, 
+    HeartHandshake, 
+    Lightbulb, 
+    FileEdit,
+    Github,
+    Instagram
+} from "lucide-react";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  // { href: "/job-match", label: "Job Match Analyzer", icon: ClipboardCheck }, // Removed
   { href: "/job-suggester", label: "Job Role Suggester", icon: Lightbulb },
   { href: "/resume-rewriter", label: "ATS Resume Maker", icon: FileEdit },
   { href: "/cover-letter", label: "Cover Letter Generator", icon: FileText },
@@ -16,6 +29,12 @@ const navItems = [
   { href: "/mock-interview", label: "Mock Interview", icon: Mic },
   { href: "/soft-skills", label: "Soft Skills Analysis", icon: HeartHandshake },
   { href: "/chatbot", label: "AI Chatbot", icon: MessageSquare },
+];
+
+const socialLinks = [
+  { name: "GitHub", href: "https://github.com/amithviswas", icon: Github },
+  { name: "LinkedIn", href: "https://www.linkedin.com/in/amith-viswas-reddy/", icon: Linkedin },
+  { name: "Instagram", href: "https://www.instagram.com/amithviswas_reddy/", icon: Instagram },
 ];
 
 export function AppSidebar() {
@@ -29,7 +48,7 @@ export function AppSidebar() {
           <span>CareerCompass</span>
         </Link>
       </div>
-      <nav className="flex-1 space-y-2 p-4">
+      <nav className="flex-1 space-y-2 p-4 overflow-y-auto">
         {navItems.map((item) => (
           <Button
             key={item.href}
@@ -49,6 +68,32 @@ export function AppSidebar() {
           </Button>
         ))}
       </nav>
+      {/* Social Icons for Desktop Sidebar */}
+      <div className="mt-auto border-t border-sidebar-border p-4">
+        <TooltipProvider>
+          <div className="flex justify-around items-center">
+            {socialLinks.map((social) => (
+              <Tooltip key={social.name}>
+                <TooltipTrigger asChild>
+                  <Button
+                    asChild
+                    variant="ghost"
+                    size="icon"
+                    className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                  >
+                    <Link href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.name}>
+                      <social.icon className="h-5 w-5" />
+                    </Link>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right" className="bg-popover text-popover-foreground">
+                  <p>{social.name}</p>
+                </TooltipContent>
+              </Tooltip>
+            ))}
+          </div>
+        </TooltipProvider>
+      </div>
     </aside>
   );
 }

@@ -74,7 +74,7 @@ export function AppHeader() {
               <span className="sr-only">Open menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-72 sm:w-80 bg-sidebar text-sidebar-foreground p-0">
+          <SheetContent side="left" className="w-72 sm:w-80 bg-sidebar text-sidebar-foreground p-0 flex flex-col">
             <SheetTitle className="sr-only">Mobile Navigation Menu</SheetTitle>
             <div className="flex items-center justify-between h-16 border-b border-sidebar-border px-4">
               <Link 
@@ -92,7 +92,7 @@ export function AppHeader() {
                 </Button>
               </SheetClose>
             </div>
-            <nav className="flex-1 space-y-1 p-4">
+            <nav className="flex-1 space-y-1 p-4 overflow-y-auto">
               {navItems.map((item) => (
                 <Button
                   key={item.href}
@@ -113,6 +113,32 @@ export function AppHeader() {
                 </Button>
               ))}
             </nav>
+            {/* Social Icons for Mobile Menu Sheet */}
+            <div className="mt-auto border-t border-sidebar-border p-4">
+              <TooltipProvider>
+                <div className="flex justify-around items-center">
+                  {socialLinks.map((social) => (
+                    <Tooltip key={social.name}>
+                      <TooltipTrigger asChild>
+                        <Button
+                          asChild
+                          variant="ghost"
+                          size="icon"
+                          className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                        >
+                          <Link href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.name}>
+                            <social.icon className="h-5 w-5" />
+                          </Link>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="top" className="bg-popover text-popover-foreground">
+                        <p>{social.name}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  ))}
+                </div>
+              </TooltipProvider>
+            </div>
           </SheetContent>
         </Sheet>
 
@@ -124,23 +150,7 @@ export function AppHeader() {
       </div>
       
       <div className="flex items-center gap-1 sm:gap-2">
-        <TooltipProvider>
-          {socialLinks.map((social) => (
-            <Tooltip key={social.name}>
-              <TooltipTrigger asChild>
-                <Button asChild variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
-                  <Link href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.name}>
-                    <social.icon className="h-5 w-5" />
-                  </Link>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{social.name}</p>
-              </TooltipContent>
-            </Tooltip>
-          ))}
-        </TooltipProvider>
-
+        {/* Social links removed from here */}
         {user && (
           <div className="hidden sm:flex items-center gap-2 text-sm text-muted-foreground ml-2">
             <UserCircle className="h-5 w-5" />
