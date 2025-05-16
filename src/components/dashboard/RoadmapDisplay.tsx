@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { CheckCircle, XCircle, Target, Lightbulb, BarChart3, Award } from "lucide-react";
+import { CheckCircle, XCircle, Target, Lightbulb, Award } from "lucide-react";
 import type { AnalyzeResumeAndRecommendOutput } from "@/ai/flows/resume-analyzer";
 
 interface RoadmapDisplayProps {
@@ -74,8 +74,15 @@ export function RoadmapDisplay({ analysis }: RoadmapDisplayProps) {
                 <Award className="mr-2 h-5 w-5 text-indigo-500" /> Benchmark Feedback & Resume Optimization
               </div>
             </AccordionTrigger>
-            <AccordionContent className="text-sm p-4 bg-secondary/30 rounded-md whitespace-pre-line">
-              {analysis.benchmarkFeedback}
+            <AccordionContent className="text-sm p-4 bg-secondary/30 rounded-md space-y-3">
+              {analysis.benchmarkFeedback && analysis.benchmarkFeedback.score !== undefined && (
+                <p className="font-semibold">
+                  Overall Suitability Score: <span className="text-primary text-lg">{analysis.benchmarkFeedback.score}/100</span>
+                </p>
+              )}
+              <div className="whitespace-pre-line">
+                {analysis.benchmarkFeedback?.feedbackText}
+              </div>
             </AccordionContent>
           </AccordionItem>
         </Accordion>

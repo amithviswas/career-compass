@@ -25,9 +25,16 @@ const AnalyzeResumeAndRecommendOutputSchema = z.object({
   learningResources: z
     .string()
     .describe('Recommendations for courses, certifications, or other resources to help the user acquire the missing skills.'),
-  benchmarkFeedback: z
-    .string()
-    .describe('Feedback to optimize their profiles for specific roles, including resume suggestions.'),
+  benchmarkFeedback: z.object({
+    feedbackText: z
+      .string()
+      .describe('Qualitative feedback to optimize their profiles for specific roles, including resume suggestions.'),
+    score: z
+      .number()
+      .min(0)
+      .max(100)
+      .describe('A numerical score from 0 to 100 representing the resume\'s suitability for the target roles, based on the benchmark.'),
+  }).describe('Feedback and score to optimize their profiles for specific roles, including resume suggestions and a suitability score.'),
 });
 export type AnalyzeResumeAndRecommendOutput = z.infer<typeof AnalyzeResumeAndRecommendOutputSchema>;
 
@@ -47,8 +54,12 @@ Resume:
 Career Goals:
 {{careerGoals}}
 
-Identify the user's strengths, weaknesses, and missing skills relative to their career goals. Recommend specific learning resources (courses, certifications, etc.) to acquire the missing skills. Also provide feedback to optimize their profiles for specific roles, including resume suggestions.
-Your response must be structured according to the provided output schema.`,
+Identify the user's strengths, weaknesses, and missing skills relative to their career goals. Recommend specific learning resources (courses, certifications, etc.) to acquire the missing skills. 
+Also provide benchmark feedback to optimize their profiles for specific roles. This benchmark feedback should include:
+1. Qualitative feedback with resume suggestions.
+2. A numerical score from 0 to 100 representing the resume's suitability for the target roles.
+
+Your response must be structured according to the provided output schema. Ensure the score is part of the 'benchmarkFeedback' object.`,
 });
 
 const analyzeResumeAndRecommendFlow = ai.defineFlow(
