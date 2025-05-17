@@ -34,9 +34,7 @@ export default function HomePage() {
               </Link>
             </Button>
           </div>
-          <p className="text-xs text-muted-foreground pt-4">
-            Powered by Firebase Studio AI
-          </p>
+          <p className="text-xs text-muted-foreground pt-4 text-center">Powered by AVR</p>
         </CardContent>
       </Card>
     </div>
