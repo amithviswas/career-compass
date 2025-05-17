@@ -3,6 +3,8 @@
 
 [![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/) [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/) [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/) [![Genkit](https://img.shields.io/badge/Genkit_(Firebase%20AI)-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/docs/genkit)
 
+**🚀 [Live Preview](https://9000-firebase-studio-1747402899695.cluster-htdgsbmflbdmov5xrjithceibm.cloudworkstations.dev)**
+
 CareerCompass is a comprehensive web application built with Next.js, React, and Genkit, designed to empower users in their career journey. It offers a suite of AI-driven tools for resume analysis, ATS-optimized resume building, personalized cover letter generation, LinkedIn profile enhancement, mock interview simulations with real-time feedback, soft skills analysis, and career advice via an AI chatbot.
 
 ## ✨ Key Features
@@ -51,9 +53,10 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/amithviswas/career-compass.git
+    git clone https://github.com/your-username/career-compass.git
     cd career-compass
     ```
+    *(Replace `your-username/career-compass.git` with your actual repository URL)*
 
 2.  **Install dependencies:**
     ```bash
