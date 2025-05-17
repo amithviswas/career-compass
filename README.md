@@ -53,11 +53,10 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/career-compass.git
+    git clone https://github.com/amithviswas/career-compass.git
     cd career-compass
     ```
-    *(Replace `your-username/career-compass.git` with your actual repository URL)*
-
+    
 2.  **Install dependencies:**
     ```bash
     npm install
